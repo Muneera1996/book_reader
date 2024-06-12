@@ -12,12 +12,29 @@ class BookDetailsScreen extends StatefulWidget {
 }
 
 class _BookDetailsScreenState extends State<BookDetailsScreen> {
+
+  bool _isBookSaved = false;
+  late Book book;
+  late bool isFromSavedScreen;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments as BookDetailsArguments;
+    book = args.itemBook;
+    isFromSavedScreen = args.isFromSavedScreen;
+    _checkIfBookIsSaved();
+  }
+
+  Future<void> _checkIfBookIsSaved() async {
+    bool exists = await DatabaseHelper.instance.bookExists(book.id);
+    setState(() {
+      _isBookSaved = exists;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final args =
-    ModalRoute.of(context)?.settings.arguments as BookDetailsArguments;
-    final Book book = args.itemBook;
-    final bool isFromSavedScreen = args.isFromSavedScreen;
 
     final theme = Theme.of(context).textTheme;
 
@@ -71,19 +88,22 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                             try {
                               int savedInt = await DatabaseHelper.instance
                                   .insert(book);
+                              print("savedInt $savedInt");
                               SnackBar snackBar = const SnackBar(
                                   content: Text("Book Saved"));
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
+                              setState(() {
+                                _isBookSaved = true;
+                              });
                             } catch (e) {
                               print("Error: $e");
                             }
-                          },
-                          child: const Text('Save'))
+                          }, child: Text(_isBookSaved ? 'Saved' : 'Save'))
                           : ElevatedButton.icon(
                           onPressed: () async {},
-                          icon: const Icon(Icons.favorite),
-                          label: const Text('Favorite'))),
+                          icon: const Icon(Icons.save),
+                          label: const Text('Saved'))),
                   const SizedBox(
                     height: 10,
                   ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../models/book.dart';
@@ -15,7 +16,8 @@ class GridViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return
+      Expanded(
         child: GridView.builder(
             itemCount: _books.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -35,13 +37,21 @@ class GridViewWidget extends StatelessWidget {
                         arguments: BookDetailsArguments(
                             itemBook: book, isFromSavedScreen: false));
                   },
-                  child: Column(
+                  child:
+                  Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Image.network(
-                          book.imageLinks['thumbnail'] ?? '',
-                          scale: 1.2,
+                      Expanded(
+                        child: SizedBox(
+                          width: 120,
+                          height: 120,
+                          child: CachedNetworkImage(
+                            imageUrl: book.imageLinks['thumbnail'] ?? '',
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          )
+                          // Image.network(
+                          //   book.imageLinks['thumbnail'] ?? '',
+                          //   scale: 1.2,
+                          // ),
                         ),
                       ),
                       Padding(
