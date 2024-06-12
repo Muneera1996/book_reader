@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _isLoading ? const CircularProgressIndicator() : Column(
+        child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onSubmitted: (query) => _searchBooks(query),
               ),
             ),
-            GridViewWidget(books: _books)
+            _isLoading ? const CircularProgressIndicator() : GridViewWidget(books: _books)
           ],
         ),
       ),
