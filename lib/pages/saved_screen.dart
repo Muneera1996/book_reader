@@ -1,3 +1,4 @@
+import 'package:book_reader/utils/Constants.dart';
 import 'package:flutter/material.dart';
 
 import '../db/database_helper.dart';
@@ -29,7 +30,7 @@ class _SavedScreenState extends State<SavedScreen> {
                   //print("Books: ==> ${snapshot.data![index].toString()}");
                   return InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, '/details',
+                      Navigator.pushNamed(context, Constants.details,
                           arguments: BookDetailsArguments(
                               itemBook: book, isFromSavedScreen: true));
                     },

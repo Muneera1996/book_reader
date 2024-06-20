@@ -9,6 +9,7 @@ class DatabaseHelper {
   static const _tableName = 'books';
 
   DatabaseHelper._privateConstructor();
+
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   static Database? _database;
@@ -43,7 +44,8 @@ class DatabaseHelper {
         language TEXT,
         imageLinks TEXT,
         previewLink TEXT,
-        infoLink TEXT
+        infoLink TEXT,
+        quantity INTEGER DEFAULT 0
       )
     ''');
   }
@@ -75,19 +77,17 @@ class DatabaseHelper {
   // Get favorite books
   Future<List<Book>> getFavorites() async {
     Database db = await instance.database;
-    var favBooks = await db.query(_tableName, where: 'favorite = ?', whereArgs: [1]);
+    var favBooks =
+        await db.query(_tableName, where: 'favorite = ?', whereArgs: [1]);
 
     return favBooks.isNotEmpty
         ? favBooks.map((bookData) => Book.fromJsonDatabase(bookData)).toList()
         : [];
   }
-  
-  Future<bool> bookExists(String id) async{
+
+  Future<bool> bookExists(String id) async {
     Database db = await instance.database;
-     var result = await db.query(_tableName, where: 'id = ?', whereArgs: [id]);
-     return result.isNotEmpty;
-
+    var result = await db.query(_tableName, where: 'id = ?', whereArgs: [id]);
+    return result.isNotEmpty;
   }
-
-
 }

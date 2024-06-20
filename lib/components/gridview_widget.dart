@@ -1,8 +1,8 @@
+import 'package:book_reader/utils/Constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../models/book.dart';
-import '../pages/book_detail.dart';
 import '../utils/book_details_arguments.dart';
 
 
@@ -33,7 +33,7 @@ class GridViewWidget extends StatelessWidget {
                   onTap: () {
                     // Navigate to the details screen
                    // Navigator.push(context, MaterialPageRoute(builder: (context) => BookDetailsScreen()));
-                    Navigator.pushNamed(context, '/details',
+                    Navigator.pushNamed(context, Constants.details,
                         arguments: BookDetailsArguments(
                             itemBook: book, isFromSavedScreen: false));
                   },
