@@ -1,4 +1,4 @@
-import 'package:book_reader/pages/AppSingUp.dart';
+import 'package:book_reader/pages/app_sign_up.dart';
 import 'package:book_reader/themes/light_color.dart';
 import 'package:flutter/material.dart';
 

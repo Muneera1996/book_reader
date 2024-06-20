@@ -1,7 +1,8 @@
-import 'package:book_reader/models/Book.dart';
+import '../models/book.dart';
 import 'package:book_reader/models/CartList.dart';
 import 'package:book_reader/utils/SharedPreferences.dart';
 import 'package:flutter/foundation.dart';
+
 
 class AppNotifier extends ChangeNotifier {
   static final AppNotifier appNotifier = AppNotifier._internal();

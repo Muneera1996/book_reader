@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:book_reader/components/app_badge_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -16,25 +17,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       elevation: 0.0,
       centerTitle: true,
-      title: Image.asset(
-        "assets/images/logo_header.png",
-        width: 120,
-        height: 120,
-      ),
+      title: Text(title),
+      // Image.asset(
+      //   "assets/images/logo_header.png",
+      //   width: 120,
+      //   height: 120,
+      // ),
       actions: <Widget>[
-        // AppBarIcons(
-        //   icon: const Icon(
-        //     FontAwesomeIcons.search,
-        //   ),
-        //   onPress: () {
-        //     // Navigator.push(
-        //     //   context,
-        //     //   MaterialPageRoute(builder: (context) => ShoppingCartScreen()),
-        //     // );
-        //   },
-        // ),
-        // appBadgeIcons(context,-1),
-        SizedBox(width: 15,)
+        appBadgeIcons(context,-17),
+        const SizedBox(width: 15,)
       ],
     );
   }
@@ -50,11 +41,10 @@ class AppBarIcons extends StatelessWidget {
   final Icon icon;
   final Function onPress;
 
-  const AppBarIcons({
-    required Key key,
+  const AppBarIcons({super.key,
     required this.icon,
     required this.onPress,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

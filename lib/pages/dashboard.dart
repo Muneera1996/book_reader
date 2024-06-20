@@ -1,3 +1,4 @@
+import 'package:book_reader/components/custom_app_bar.dart';
 import 'package:book_reader/pages/fav_screen.dart';
 import 'package:book_reader/pages/home_screen.dart';
 import 'package:book_reader/pages/saved_screen.dart';
@@ -21,10 +22,11 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('A.Reader'),
-      ),
+      appBar: CustomAppBar(title: 'A.Reader',),
+      // AppBar(
+      //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      //   title: const Text('A.Reader'),
+      // ),
       body: screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

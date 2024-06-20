@@ -1,4 +1,4 @@
-import 'package:book_reader/models/Book.dart';
+import '../models/book.dart';
 
 
 class CartList {

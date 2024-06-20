@@ -1,7 +1,7 @@
 import 'package:book_reader/components/custom_app_bar.dart';
 import 'package:book_reader/components/button_widget.dart';
 import 'package:book_reader/components/title_text.dart';
-import 'package:book_reader/pages/AppSingUp.dart';
+import 'package:book_reader/pages/app_sign_up.dart';
 import 'package:book_reader/pages/home_screen.dart';
 import 'package:book_reader/themes/light_color.dart';
 import 'package:book_reader/themes/theme.dart';

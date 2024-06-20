@@ -1,39 +1,32 @@
-import 'dart:ffi';
 
 import 'package:book_reader/components/button_widget.dart';
 import 'package:book_reader/components/title_text.dart';
-import 'package:book_reader/models/Book.dart';
-import 'package:book_reader/models/Book.dart';
-import 'package:book_reader/models/Book.dart';
-import 'package:book_reader/models/Book.dart';
-import 'package:book_reader/models/Book.dart';
-import 'package:book_reader/models/Book.dart';
-import 'package:book_reader/models/Book.dart';
-import 'package:book_reader/models/Book.dart';
-import 'package:book_reader/models/Book.dart';
 import 'package:book_reader/models/CartList.dart';
 import 'package:book_reader/notifiers/AppNotifier.dart';
+import 'package:book_reader/pages/empty_screen.dart';
 import 'package:book_reader/themes/light_color.dart';
 import 'package:book_reader/themes/theme.dart';
 import 'package:book_reader/utils/SharedPreferences.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
+import '../models/book.dart';
+
 
 class ShoppingCartScreen extends StatelessWidget {
-  const ShoppingCartScreen({required Key key}) : super(key: key);
+  const ShoppingCartScreen({super.key});
 
   Widget _Books(BuildContext context) {
-    return Column(
-        children: CartList.getInstance()
-            .getCartItems()
-            .map((x) => _item(context, x))
-            .toList());
+    return SafeArea(
+      child: Column(
+          children: CartList.getInstance()
+              .getCartItems()
+              .map((x) => _item(context, x))
+              .toList()),
+    );
   }
 
   Widget _item(BuildContext context, Book model) {
-    return Container(
+    return SizedBox(
       height: 270,
       child: Card(
         elevation: 8,
@@ -41,7 +34,7 @@ class ShoppingCartScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               TitleText(
@@ -54,13 +47,13 @@ class ShoppingCartScreen extends StatelessWidget {
                   Container(
                     width: 100,
                     height: 100,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         shape: BoxShape.rectangle,
                         color: LightColor.lightGrey,
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    child: Image.network(model.previewLink),
+                    child: Image.network(model.imageLinks['thumbnail'] ?? ''),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Expanded(
@@ -71,7 +64,7 @@ class ShoppingCartScreen extends StatelessWidget {
                           children: <Widget>[
                             RichText(
                                 text: TextSpan(children: [
-                              TextSpan(
+                              const TextSpan(
                                 text: 'Price:  ',
                                 style: TextStyle(
                                     color: LightColor.black, fontSize: 17),
@@ -79,11 +72,11 @@ class ShoppingCartScreen extends StatelessWidget {
                               TextSpan(
                                 text:
                                     '${AppSharedPreferences().getCurrencySymbol()}${model.pageCount} \n',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: LightColor.secondaryDarkColor,
                                     fontSize: 17),
                               ),
-                              TextSpan(
+                              const TextSpan(
                                 text: 'Tax:   ',
                                 style: TextStyle(
                                     color: LightColor.black, fontSize: 17),
@@ -91,28 +84,27 @@ class ShoppingCartScreen extends StatelessWidget {
                               TextSpan(
                                 text:
                                     "${AppSharedPreferences().getCurrencySymbol()}${model.pageCount}\n",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: LightColor.secondaryDarkColor,
                                     fontSize: 17),
                               ),
-                              TextSpan(
+                              const TextSpan(
                                 text: 'Licence \n',
                                 style: TextStyle(
                                     color: LightColor.black, fontSize: 15),
                               ),
-                              TextSpan(
-                                text: 'Minimum Quantity: ${model.quantity}',
-                                style: TextStyle(
-                                    color: LightColor.black, fontSize: 15),
-                              )
+                              // TextSpan(
+                              //   text: 'Minimum Quantity: ${model.quantity}',
+                              //   style: const TextStyle(
+                              //       color: LightColor.black, fontSize: 15),
+                              // )
                             ]))
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         quantitySection(context, model),
-                        _getDivider(),
                       ],
                     ),
                   ),
@@ -141,17 +133,17 @@ class ShoppingCartScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     InkWell(
-                      onTap: () => Provider.of<AppNotifier>(context)
+                      onTap: () => Provider.of<AppNotifier>(context,listen: false)
                           .removeCartItem(model.id),
-                      child: TitleText(
-                        text: "REMOVE",
-                        color: Colors.red,
-                        fontSize: 17,
+                      child: const TitleText(
+                          text: "REMOVE",
+                          color: Colors.red,
+                          fontSize: 17,
+                        ),
                       ),
-                    ),
                     RichText(
                         text: TextSpan(children: [
-                      TextSpan(
+                      const TextSpan(
                         text: 'Total:   ',
                         style: TextStyle(color: LightColor.black, fontSize: 18),
                       ),
@@ -182,13 +174,16 @@ class ShoppingCartScreen extends StatelessWidget {
         ),
         InkWell(
           onTap: () =>
-              Provider.of<AppNotifier>(context).decrementCartItem(model.id),
+              Provider.of<AppNotifier>(context,listen: false).decrementCartItem(model.id),
           child: Container(
             alignment: Alignment.center,
             width: 25,
             height: 25,
+
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
+              color: LightColor.secondaryColor,
+
             ),
             child: const TitleText(
               text: '-',
@@ -205,7 +200,7 @@ class ShoppingCartScreen extends StatelessWidget {
         ),
         InkWell(
           onTap: () =>
-              Provider.of<AppNotifier>(context).incrementCartItem(model.id),
+              Provider.of<AppNotifier>(context,listen: false).incrementCartItem(model.id),
           child: Container(
             alignment: Alignment.center,
             width: 25,
@@ -214,7 +209,7 @@ class ShoppingCartScreen extends StatelessWidget {
               color: LightColor.secondaryColor,
               borderRadius: BorderRadius.circular(8.0),
             ),
-            child: TitleText(
+            child: const TitleText(
               text: '+',
               color: Colors.white,
             ),
@@ -225,7 +220,7 @@ class ShoppingCartScreen extends StatelessWidget {
   }
 
   Divider _getDivider() {
-    return Divider(
+    return const Divider(
       thickness: 1,
       height: 30,
     );
@@ -238,13 +233,13 @@ class ShoppingCartScreen extends StatelessWidget {
         RichText(
             text: TextSpan(children: [
           TextSpan(
-            text: "${cartSize.toString()}",
-            style: TextStyle(
+            text: cartSize.toString(),
+            style: const TextStyle(
                 color: LightColor.secondaryDarkColor,
                 fontSize: 18,
                 fontWeight: FontWeight.bold),
           ),
-          TextSpan(
+          const TextSpan(
             text: " Items",
             style: TextStyle(
               color: Colors.black,
@@ -254,7 +249,7 @@ class ShoppingCartScreen extends StatelessWidget {
         ])),
         RichText(
             text: TextSpan(children: [
-          TextSpan(
+          const TextSpan(
             text: "Total: ",
             style: TextStyle(
               color: LightColor.black,
@@ -264,7 +259,7 @@ class ShoppingCartScreen extends StatelessWidget {
           TextSpan(
             text:
                 '${AppSharedPreferences().getCurrencySymbol()}${getPrice(CartList.getInstance().getCartItems())}',
-            style: TextStyle(
+            style: const TextStyle(
               color: LightColor.secondaryDarkColor,
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -276,9 +271,9 @@ class ShoppingCartScreen extends StatelessWidget {
   }
 
   Widget _submitButton(BuildContext context) {
-    return Expanded(
-      child: Container(
+      return Container(
         width: AppTheme.fullWidth(context) * 0.8,
+        height: 40.0,
         child: ButtonWidget(
           text: 'Next',
           fontSize: 20,
@@ -286,14 +281,14 @@ class ShoppingCartScreen extends StatelessWidget {
             // Navigator.push(context, MaterialPageRoute(builder: (context) => ShippingAddress()));
           },
         ),
-      ),
+
     );
   }
 
   double getPrice(List<Book> cartList) {
     double price = 0;
     cartList.forEach((x) {
-      //  price += double.parse(x.productsPrice) * x.productsQuantity;
+       price += double.parse(x.pageCount.toString()) * x.quantity;
     });
     return price;
   }
@@ -302,12 +297,12 @@ class ShoppingCartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: LightColor.background,
-        // appBar: appBarWidget(context),
+        appBar: AppBar(title: const Text("Cart"),),
         body: Consumer<AppNotifier>(builder: (context, value, child) {
-          return Container(
-            child: Column(
+          if(value.getCartSize()>0){
+            return Column(
               children: <Widget>[
-                Container(
+                SizedBox(
                   height: AppTheme.fullHeight(context) * 0.75,
                   child: SingleChildScrollView(
                     child: Padding(
@@ -315,38 +310,40 @@ class ShoppingCartScreen extends StatelessWidget {
                       child: Column(
                         children: <Widget>[
                           _Books(context),
-                          _getDivider(),
                         ],
                       ),
                     ),
                   ),
                 ),
+
                 Expanded(
                   child: Container(
                     color: Colors.white,
                     child: Column(
-                      //mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         _price(value.getCartSize()),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         _submitButton(context),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                       ],
                     ),
                   ),
                 ),
               ],
-            ),
-          );
+            );
+          }
+          else{
+            return const EmptyCartScreen();
+          }
         }));
   }
 
   String getTotalItem(List<Book> cartList) {
     int items = 0;
-    cartList.forEach((x) {
-      //   items +=  x.productsQuantity;
-    });
+    for (var x in cartList) {
+        items +=  x.quantity;
+    }
     return items.toString();
   }
 }

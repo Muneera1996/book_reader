@@ -1,8 +1,12 @@
+import 'package:book_reader/notifiers/AppNotifier.dart';
+import 'package:book_reader/themes/light_color.dart';
+import 'package:book_reader/utils/functions.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../db/database_helper.dart';
-import '../models/book.dart';
 import '../utils/book_details_arguments.dart';
+import '../models/book.dart';
 
 class BookDetailsScreen extends StatefulWidget {
   const BookDetailsScreen({super.key});
@@ -39,6 +43,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     final theme = Theme.of(context).textTheme;
 
     return Scaffold(
+      floatingActionButton: Builder(builder: (context) => _floatingButton(context,book)),
       appBar: AppBar(
         title: Text(book.title),
       ),
@@ -126,7 +131,8 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         border: Border.all(
                             color: Theme.of(context).colorScheme.secondary)),
                     child: Text(book.description),
-                  )
+                  ),
+
                 ],
               )
             ],
@@ -135,5 +141,19 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       ),
     );
   }
+}
+
+FloatingActionButton _floatingButton(BuildContext context,Book book) {
+  return FloatingActionButton(
+    onPressed: () {
+      bool itemAdded = Provider.of<AppNotifier>(context,listen: false).addCartItem(book);
+      if(itemAdded){
+        scaffoldMessage(context, 'Item Added into Cart');
+      }
+    },
+    backgroundColor: LightColor.secondaryColor,
+    child: Icon(Icons.shopping_basket,
+        color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
+  );
 }
 
