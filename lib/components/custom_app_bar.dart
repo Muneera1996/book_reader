@@ -18,11 +18,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0.0,
       centerTitle: true,
       title: Text(title),
-      // Image.asset(
-      //   "assets/images/logo_header.png",
-      //   width: 120,
-      //   height: 120,
-      // ),
       actions: <Widget>[
         appBadgeIcons(context,-17),
         const SizedBox(width: 15,)

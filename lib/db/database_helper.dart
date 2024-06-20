@@ -1,6 +1,5 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../models/book.dart';
 
 class DatabaseHelper {
@@ -20,7 +19,6 @@ class DatabaseHelper {
   }
 
   _initDatabase() async {
-    //device/data/datasename.db
     String path = join(await getDatabasesPath(), _databaseName);
     return await openDatabase(
       path,
@@ -45,14 +43,19 @@ class DatabaseHelper {
         imageLinks TEXT,
         previewLink TEXT,
         infoLink TEXT,
-        quantity INTEGER DEFAULT 0
+        quantity INTEGER DEFAULT 0,
+        save INTEGER DEFAULT 0
       )
     ''');
   }
 
   Future<int> insert(Book book) async {
     Database db = await instance.database;
-    return await db.insert(_tableName, book.toJson());
+    return await db.insert(
+      _tableName,
+      book.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<List<Book>> readAllBooks() async {
@@ -63,22 +66,77 @@ class DatabaseHelper {
         : [];
   }
 
+  Future<List<Book>> readAllSavedBooks() async {
+    Database db = await instance.database;
+    var books = await db.query(
+      _tableName,
+      where: 'save == 1', // Adding WHERE clause to filter books with quantity > 0
+    );
+    return books.isNotEmpty
+        ? books.map((bookData) => Book.fromJsonDatabase(bookData)).toList()
+        : [];
+  }
+
+  Future<List<Book>> readAllCartBooks() async {
+    Database db = await instance.database;
+    var books = await db.query(
+      _tableName,
+      where: 'quantity > 0', // Adding WHERE clause to filter books with quantity > 0
+    );
+    return books.isNotEmpty
+        ? books.map((bookData) => Book.fromJsonDatabase(bookData)).toList()
+        : [];
+  }
+
+
   Future<int> toggleFavoriteStatus(String id, bool isFavorite) async {
     Database db = await instance.database;
     return await db.update(_tableName, {'favorite': isFavorite ? 1 : 0},
         where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<int> deleteBook(String id) async {
+  Future<int> deleteCartBook(String id) async {
     Database db = await instance.database;
-    return await db.delete(_tableName, where: 'id = ?', whereArgs: [id]);
+    var book = await db.query(_tableName, where: 'id = ?', whereArgs: [id]);
+
+    if (book.isNotEmpty) {
+      var currentBook = Book.fromJsonDatabase(book.first);
+
+      if (currentBook.save == 0) {
+        // Delete the entity if save is 0
+        return await db.delete(_tableName, where: 'id = ?', whereArgs: [id]);
+      } else {
+        // Set quantity to 0 if save is 1
+        return await db.update(_tableName, {'quantity': 0}, where: 'id = ?', whereArgs: [id]);
+      }
+    }
+    return 0; // Return 0 if no book with the given id is found
+
+}
+
+  Future<int> deleteSavedBook(String id) async {
+    Database db = await instance.database;
+    var book = await db.query(_tableName, where: 'id = ?', whereArgs: [id]);
+
+    if (book.isNotEmpty) {
+      var currentBook = Book.fromJsonDatabase(book.first);
+
+      if (currentBook.quantity <= 0) {
+        // Delete the book if quantity is 0 or less
+        return await db.delete(_tableName, where: 'id = ?', whereArgs: [id]);
+      } else {
+        // Otherwise, set save to 0
+        return await db.update(_tableName, {'save': 0}, where: 'id = ?', whereArgs: [id]);
+      }
+    }
+
+    return 0; // Return 0 if no book with the given id is found
   }
 
-  // Get favorite books
   Future<List<Book>> getFavorites() async {
     Database db = await instance.database;
     var favBooks =
-        await db.query(_tableName, where: 'favorite = ?', whereArgs: [1]);
+    await db.query(_tableName, where: 'favorite = ?', whereArgs: [1]);
 
     return favBooks.isNotEmpty
         ? favBooks.map((bookData) => Book.fromJsonDatabase(bookData)).toList()

@@ -15,6 +15,7 @@ class Book {
   final String previewLink;
   final String infoLink;
   int quantity; // Added this line
+  int save; // Added this line
 
   Book({
     required this.id,
@@ -30,7 +31,8 @@ class Book {
     required this.imageLinks,
     required this.previewLink,
     required this.infoLink,
-    this.quantity = 1, // Initialize with a default quantity
+    this.quantity = 0,
+    this.save=0// Initialize with a default quantity
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -75,7 +77,8 @@ class Book {
       'imageLinks': json.encode(imageLinks), // Serialize map to a JSON string
       'previewLink': previewLink,
       'infoLink': infoLink,
-      'quantity': quantity // Include quantity in JSON
+      'quantity': quantity ,
+      'save': save
     };
   }
 
@@ -103,7 +106,8 @@ class Book {
         isFavorite: (jsonObject['favorite'] as int) == 1,
         previewLink: jsonObject['previewLink'] as String,
         infoLink: jsonObject['infoLink'] as String,
-        quantity: jsonObject['quantity'] as int// Retrieve quantity from database
+        quantity: jsonObject['quantity'] as int,
+        save: jsonObject['save'] as int
     );
   }
 

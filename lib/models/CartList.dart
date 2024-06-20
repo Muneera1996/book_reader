@@ -1,68 +1,86 @@
+import 'package:book_reader/db/database_helper.dart';
+
 import '../models/book.dart';
 
-
 class CartList {
-  static List<Book> _items = [];
-  static CartList? _cartList;
+  static final CartList _instance = CartList._internal();
+  final List<Book> _cartItems = [];
 
-  CartList._internal(); // Private constructor for singleton
+  CartList._internal();
 
-  static CartList getInstance() {
-    _cartList ??= CartList._internal();
-    return _cartList!;
-  }
+  static CartList getInstance() => _instance;
 
-  int getCartSize() {
-    int items = 0;
-    _items.forEach((x) {
-      items += x.quantity; // Use quantity here
-    });
-    return items;
-  }
-
-  List<Book> getCartItems() {
-    return _items;
-  }
-
-  void removeItem(String bookId) {
-    _items.removeWhere((item) => item.id == bookId);
-  }
-
-  void decrementItem(String bookId) {
-    for (var item in _items) {
-      if (item.id == bookId) {
-        print("Item found to decrement");
-        // Handle quantity separately
-        if (item.quantity > 1) {
-          item.quantity -= 1; // Decrement quantity
-        } else {
-          _items.remove(item);
-        }
-        break;
-      }
-    }
+  bool checkBookExistInCart(String productId) {
+    return _cartItems.any((book) => book.id == productId);
   }
 
   bool addItem(Book book) {
-    bool isItemFound = checkBookExistInCart(book.id);
-
-    if (!isItemFound) {
-      _items.add(book);
+    if (checkBookExistInCart(book.id)) {
+      return false;
     }
-
+    book.quantity = 1;
+    _cartItems.add(book);
     return true;
   }
+  void incrementItem(String productId) {
+    final index = _cartItems.indexWhere((book) => book.id == productId);
+    if (index != -1) {
+      _cartItems[index].quantity++;
+    }
+  }
+  //
+  // Future<void> decrementItem(String productId) async {
+  //   final index = _cartItems.indexWhere((book) => book.id == productId);
+  //   if (index != -1) {
+  //     _cartItems[index].quantity--;
+  //     if (_cartItems[index].quantity <= 0) {
+  //      await deleteCartItem(productId);
+  //     } else {
+  //       await saveCartToDatabase();
+  //     }
+  //   }
+  // }
 
-  bool checkBookExistInCart(String bookId) {
-    for (var item in _items) {
-      if (item.id == bookId) {
-        print("Item found in cart");
-        item.quantity += 1; // Increment quantity if found
-        return true;
+  Future<void> decrementItem(String productId) async {
+    final index = _cartItems.indexWhere((book) => book.id == productId);
+    if (index != -1) {
+      if (_cartItems[index].quantity > 0) {
+        _cartItems[index].quantity--;
+        if (_cartItems[index].quantity == 0) {
+          await deleteCartItem(productId);
+        } else {
+          await saveCartToDatabase();
+        }
       }
     }
-    return false;
+  }
+
+
+  int getCartSize() {
+    return _cartItems.length;
+  }
+
+
+  List<Book> getCartItems() {
+    return _cartItems;
+  }
+
+  Future<void> deleteCartItem(String id) async {
+    final dbHelper = DatabaseHelper.instance;
+    await dbHelper.deleteCartBook(id);
+    return;
+  }
+
+  Future<void> saveCartToDatabase() async {
+    final dbHelper = DatabaseHelper.instance;
+    for (var book in _cartItems) {
+      await dbHelper.insert(book);
+    }
+  }
+
+  Future<void> loadCartFromDatabase() async {
+    final dbHelper = DatabaseHelper.instance;
+    _cartItems.clear();
+    _cartItems.addAll(await dbHelper.readAllCartBooks());
   }
 }
-
-

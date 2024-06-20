@@ -3,6 +3,9 @@ import 'package:book_reader/pages/fav_screen.dart';
 import 'package:book_reader/pages/home_screen.dart';
 import 'package:book_reader/pages/saved_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../notifiers/AppNotifier.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -18,6 +21,17 @@ class _DashboardState extends State<Dashboard> {
     SavedScreen(),
     FavoritesScreen()
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCart();
+  }
+
+  Future<void> _loadCart() async {
+    await Provider.of<AppNotifier>(context, listen: false)
+        .loadCartFromDatabase();
+  }
 
   @override
   Widget build(BuildContext context) {

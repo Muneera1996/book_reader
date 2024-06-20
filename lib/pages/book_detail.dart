@@ -91,6 +91,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                           onPressed: () async {
                             // save a book to the datase
                             try {
+                              book.save = 1;
                               int savedInt = await DatabaseHelper.instance
                                   .insert(book);
                               print("savedInt $savedInt");

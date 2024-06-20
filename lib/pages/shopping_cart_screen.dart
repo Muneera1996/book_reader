@@ -1,4 +1,3 @@
-
 import 'package:book_reader/components/button_widget.dart';
 import 'package:book_reader/components/title_text.dart';
 import 'package:book_reader/models/CartList.dart';
@@ -11,9 +10,70 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/book.dart';
 
-
-class ShoppingCartScreen extends StatelessWidget {
+class ShoppingCartScreen extends StatefulWidget {
   const ShoppingCartScreen({super.key});
+
+  @override
+  State<ShoppingCartScreen> createState() => _ShoppingCartScreenState();
+}
+
+class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
+  @override
+  void initState() {
+    super.initState();
+    //_loadCart();
+  }
+
+  Future<void> _loadCart() async {
+    await Provider.of<AppNotifier>(context, listen: false)
+        .loadCartFromDatabase();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: LightColor.background,
+        appBar: AppBar(
+          title: const Text("Cart"),
+        ),
+        body: Consumer<AppNotifier>(builder: (context, value, child) {
+          if (value.getCartSize() > 0) {
+            return Column(
+              children: <Widget>[
+                SizedBox(
+                  height: AppTheme.fullHeight(context) * 0.75,
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: <Widget>[
+                          _Books(context),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        const SizedBox(height: 10),
+                        _price(value.getCartSize()),
+                        const SizedBox(height: 10),
+                        _submitButton(context),
+                        const SizedBox(height: 5),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return const EmptyCartScreen();
+          }
+        }));
+  }
 
   Widget _Books(BuildContext context) {
     return SafeArea(
@@ -64,40 +124,35 @@ class ShoppingCartScreen extends StatelessWidget {
                           children: <Widget>[
                             RichText(
                                 text: TextSpan(children: [
-                              const TextSpan(
-                                text: 'Price:  ',
-                                style: TextStyle(
-                                    color: LightColor.black, fontSize: 17),
-                              ),
                               TextSpan(
                                 text:
-                                    '${AppSharedPreferences().getCurrencySymbol()}${model.pageCount} \n',
+                                    '${model.description} \n',
                                 style: const TextStyle(
-                                    color: LightColor.secondaryDarkColor,
-                                    fontSize: 17),
+                                    color: LightColor.darkgrey,
+                                    fontSize: 12),
                               ),
                               const TextSpan(
-                                text: 'Tax:   ',
+                                text: 'Price:   ',
                                 style: TextStyle(
-                                    color: LightColor.black, fontSize: 17),
+                                    color: LightColor.black, fontSize: 12),
                               ),
                               TextSpan(
                                 text:
                                     "${AppSharedPreferences().getCurrencySymbol()}${model.pageCount}\n",
                                 style: const TextStyle(
                                     color: LightColor.secondaryDarkColor,
-                                    fontSize: 17),
+                                    fontSize: 12),
                               ),
                               const TextSpan(
-                                text: 'Licence \n',
+                                text: 'Author \n',
                                 style: TextStyle(
-                                    color: LightColor.black, fontSize: 15),
+                                    color: LightColor.black, fontSize: 12),
                               ),
-                              // TextSpan(
-                              //   text: 'Minimum Quantity: ${model.quantity}',
-                              //   style: const TextStyle(
-                              //       color: LightColor.black, fontSize: 15),
-                              // )
+                              TextSpan(
+                                text: '${model.authors}',
+                                style: const TextStyle(
+                                    color: LightColor.black, fontSize: 12),
+                              )
                             ]))
                           ],
                         ),
@@ -133,14 +188,15 @@ class ShoppingCartScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     InkWell(
-                      onTap: () => Provider.of<AppNotifier>(context,listen: false)
-                          .removeCartItem(model.id),
+                      onTap: () =>
+                          Provider.of<AppNotifier>(context, listen: false)
+                              .removeCartItem(model.id),
                       child: const TitleText(
-                          text: "REMOVE",
-                          color: Colors.red,
-                          fontSize: 17,
-                        ),
+                        text: "REMOVE",
+                        color: Colors.red,
+                        fontSize: 17,
                       ),
+                    ),
                     RichText(
                         text: TextSpan(children: [
                       const TextSpan(
@@ -173,17 +229,15 @@ class ShoppingCartScreen extends StatelessWidget {
           textAlign: TextAlign.start,
         ),
         InkWell(
-          onTap: () =>
-              Provider.of<AppNotifier>(context,listen: false).decrementCartItem(model.id),
+          onTap: () => Provider.of<AppNotifier>(context, listen: false)
+              .decrementCartItem(model.id),
           child: Container(
             alignment: Alignment.center,
             width: 25,
             height: 25,
-
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               color: LightColor.secondaryColor,
-
             ),
             child: const TitleText(
               text: '-',
@@ -199,8 +253,8 @@ class ShoppingCartScreen extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: () =>
-              Provider.of<AppNotifier>(context,listen: false).incrementCartItem(model.id),
+          onTap: () => Provider.of<AppNotifier>(context, listen: false)
+              .incrementCartItem(model.id),
           child: Container(
             alignment: Alignment.center,
             width: 25,
@@ -271,78 +325,31 @@ class ShoppingCartScreen extends StatelessWidget {
   }
 
   Widget _submitButton(BuildContext context) {
-      return Container(
-        width: AppTheme.fullWidth(context) * 0.8,
-        height: 40.0,
-        child: ButtonWidget(
-          text: 'Next',
-          fontSize: 20,
-          onPressed: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => ShippingAddress()));
-          },
-        ),
-
+    return Container(
+      width: AppTheme.fullWidth(context) * 0.8,
+      height: 40.0,
+      child: ButtonWidget(
+        text: 'Next',
+        fontSize: 20,
+        onPressed: () {
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => ShippingAddress()));
+        },
+      ),
     );
   }
 
   double getPrice(List<Book> cartList) {
     double price = 0;
     cartList.forEach((x) {
-       price += double.parse(x.pageCount.toString()) * x.quantity;
+      price += double.parse(x.pageCount.toString()) * x.quantity;
     });
     return price;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: LightColor.background,
-        appBar: AppBar(title: const Text("Cart"),),
-        body: Consumer<AppNotifier>(builder: (context, value, child) {
-          if(value.getCartSize()>0){
-            return Column(
-              children: <Widget>[
-                SizedBox(
-                  height: AppTheme.fullHeight(context) * 0.75,
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: <Widget>[
-                          _Books(context),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-
-                Expanded(
-                  child: Container(
-                    color: Colors.white,
-                    child: Column(
-                      children: <Widget>[
-                        const SizedBox(height: 10),
-                        _price(value.getCartSize()),
-                        const SizedBox(height: 10),
-                        _submitButton(context),
-                        const SizedBox(height: 5),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-          else{
-            return const EmptyCartScreen();
-          }
-        }));
   }
 
   String getTotalItem(List<Book> cartList) {
     int items = 0;
     for (var x in cartList) {
-        items +=  x.quantity;
+      items += x.quantity;
     }
     return items.toString();
   }

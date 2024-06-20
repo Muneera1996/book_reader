@@ -44,6 +44,8 @@ class MyApp extends StatelessWidget {
           Constants.favorites : (context) => const FavoritesScreen(),
           Constants.details : (context) => const BookDetailsScreen(),
           Constants.dashboard : (context) => const Dashboard(),
+          Constants.signIn : (context) => const AppSignIn(),
+          Constants.signUp : (context) => const AppSignIn(),
         },
       home: SplashScreen()
     );

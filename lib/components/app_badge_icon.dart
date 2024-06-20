@@ -31,16 +31,17 @@ class AppBadgeIcons extends StatelessWidget {
     return Consumer<AppNotifier>(builder: (context, value, child) {
       return InkWell(
         onTap: () {
-          if (CartList.getInstance().getCartSize() == 0) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const EmptyCartScreen()));
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ShoppingCartScreen()),
-            );
-          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ShoppingCartScreen()),
+          );
+
+          // if (CartList.getInstance().getCartSize() == 0) {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => const EmptyCartScreen()));
+          // } else {
+          // }
         },
         child: badges.Badge(
           position: badges.BadgePosition.topStart(top: topPosition, start: 5),

@@ -19,7 +19,7 @@ class _SavedScreenState extends State<SavedScreen> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
-            future: DatabaseHelper.instance.readAllBooks(),
+            future: DatabaseHelper.instance.readAllSavedBooks(),
             builder: (context, snapshot) => snapshot.hasData
                 ? ListView.builder(
                 itemCount: snapshot.data!.length,
@@ -39,8 +39,8 @@ class _SavedScreenState extends State<SavedScreen> {
                         title: Text(book.title),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            DatabaseHelper.instance.deleteBook(book.id);
+                          onPressed: () async {
+                            await DatabaseHelper.instance.deleteSavedBook(book.id);
                             setState(() {});
                           },
                         ),
