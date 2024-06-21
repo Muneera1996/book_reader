@@ -164,4 +164,8 @@ class AppSharedPreferences {
   void setPostalCode(String postalCode) {
     _sharedPreferences?.setString("postalCode", postalCode);
   }
+
+   Future<void> clearSharedPreferences() async {
+     await _sharedPreferences?.clear();
+   }
 }

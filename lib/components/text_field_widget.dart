@@ -4,59 +4,64 @@ import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final String labelText;
-  final String errorText;
+  final String? errorText;
   final TextEditingController textEditingController;
   final IconData iconData;
   final TextInputType type;
   final bool readOnly;
   final VoidCallback? function;
+  final FocusNode focusNode;
+  final bool obscureText;
 
-  const TextFieldWidget({super.key,
+  const TextFieldWidget({
+    super.key,
     required this.textEditingController,
     required this.labelText,
     required this.iconData,
     this.type = TextInputType.text,
-    this.errorText = 'Text',
+    this.errorText,
     this.readOnly = false,
     this.function,
+    required this.focusNode,
+    this.obscureText = false, // Default to false for normal text fields
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       onTap: function,
-        readOnly: readOnly,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return 'Missing Required Field';
-          }
+      readOnly: readOnly,
+      focusNode: focusNode,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Missing Required Field';
+        }
 
-          return validateField(errorText, textEditingController.text.trim());
-        },
-        keyboardType: type,
-        controller: textEditingController,
-        decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: const TextStyle(color: LightColor.black),
-          prefixIcon: Icon(
-            iconData,
-            color: LightColor.black,
-          ),
-          border: getUnderLine(),
-          enabledBorder: getUnderLine(),
-          focusedBorder: getUnderLine(),
-        ));
-  }
+        if (errorText != null) {
+          return validateField(errorText!, textEditingController.text.trim());
+        }
 
-  UnderlineInputBorder getGreenUnderLine() {
-    return const UnderlineInputBorder(
-        // borderRadius: BorderRadius.all(),
-        borderSide: BorderSide(color: Colors.green));
+        return null;
+      },
+      keyboardType: type,
+      controller: textEditingController,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: labelText,
+        labelStyle: const TextStyle(color: LightColor.black),
+        prefixIcon: Icon(
+          iconData,
+          color: LightColor.black,
+        ),
+        border: getUnderLine(),
+        enabledBorder: getUnderLine(),
+        focusedBorder: getUnderLine(),
+      ),
+    );
   }
 
   UnderlineInputBorder getUnderLine() {
     return const UnderlineInputBorder(
-        // borderRadius: BorderRadius.all(),
         borderSide: BorderSide(color: Colors.black));
   }
 }
@@ -65,16 +70,12 @@ String? validateField(String type, String data) {
   switch (type) {
     case 'Email':
       return validateEmail(data);
-      break;
     case 'Password':
       return validatePassword(data);
-      break;
-    case 'Number':
+    case 'Mobile Number':
       return validateMobile(data);
-      break;
     case 'Confirm Password':
       return validateConfirmPassword(data);
-      break;
     default:
       return validateName(data);
   }
@@ -88,19 +89,18 @@ String? validateName(String value) {
 
 String? validatePassword(String value) {
   if (!(value.length > 5) && value.isNotEmpty) {
-    return "Password should contains more then 5 character";
+    return "Password should contain more than 5 characters";
   }
   AppSignUp.password = value;
   return null;
 }
 
 String? validateConfirmPassword(String confirmPassword) {
-  //print('$confirmPassword $password');
   if (!(confirmPassword.length > 5) && confirmPassword.isNotEmpty) {
-    return "Password should contains more then 5 character";
+    return "Password should contain more than 5 characters";
   } else if (AppSignUp.password.isNotEmpty &&
       confirmPassword != AppSignUp.password) {
-    return "Password Does not Match";
+    return "Passwords do not match";
   }
   return null;
 }

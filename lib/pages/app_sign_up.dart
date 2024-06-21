@@ -1,4 +1,5 @@
 import 'package:book_reader/components/button_widget.dart';
+import 'package:book_reader/components/text_field_widget.dart';
 import 'package:book_reader/notifiers/AppNotifier.dart';
 import 'package:book_reader/pages/home_screen.dart';
 import 'package:book_reader/themes/light_color.dart';
@@ -26,151 +27,128 @@ class _AppSignUpState extends State<AppSignUp> {
   TextEditingController telephoneController = TextEditingController();
   final _signUpKey = GlobalKey<FormState>();
 
+  // Define FocusNodes for each TextFormField
+  final FocusNode _firstnameFocus = FocusNode();
+  final FocusNode _lastnameFocus = FocusNode();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _confirmPasswordFocus = FocusNode();
+  final FocusNode _telephoneFocus = FocusNode();
+
+  @override
+  void dispose() {
+    // Dispose FocusNodes to avoid memory leaks
+    _firstnameFocus.dispose();
+    _lastnameFocus.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    _confirmPasswordFocus.dispose();
+    _telephoneFocus.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Sign Up'),
-        ),
-        body: Form(
-          key: _signUpKey,
-          child: Container(
-            color: Colors.white,
-            child: ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: <Widget>[
-                const SizedBox(
-                  height: 10,
+      appBar: AppBar(
+        title: const Text('Sign Up'),
+      ),
+      body: Form(
+        key: _signUpKey,
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: <Widget>[
+              const SizedBox(height: 10),
+              const Text(
+                'Fill the below fields to create new Account',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 17,
                 ),
-                const Text(
-                  'Fill the below fields to create new Account',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: firstnameController,
-                  decoration: const InputDecoration(
-                    labelText: 'First Name',
-                    icon: Icon(FontAwesomeIcons.userCircle),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your first name';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: lastnameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Last Name',
-                    icon: Icon(FontAwesomeIcons.users),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your last name';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    icon: Icon(FontAwesomeIcons.envelope),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: telephoneController,
-                  keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    labelText: 'Mobile Number',
-                    icon: Icon(FontAwesomeIcons.phone),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your mobile number';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    icon: Icon(FontAwesomeIcons.lock),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter a password';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: confirmPasswordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirm Password',
-                    icon: Icon(FontAwesomeIcons.lock),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please confirm your password';
-                    }
-                    if (value != passwordController.text) {
-                      return 'Passwords do not match';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                        child:
-                        ButtonWidget(
-                            text: 'Register',
-                            onPressed: () => _register(context))),
-                    const SizedBox(
-                      width: 8,
+              ),
+              const SizedBox(height: 10),
+              TextFieldWidget(
+                textEditingController: firstnameController,
+                labelText: 'First Name',
+                iconData: FontAwesomeIcons.userCircle,
+                errorText: 'Please enter your first name',
+                focusNode: _firstnameFocus,
+              ),
+              TextFieldWidget(
+                textEditingController: lastnameController,
+                labelText: 'Last Name',
+                iconData: FontAwesomeIcons.users,
+                errorText: 'Please enter your last name',
+                focusNode: _lastnameFocus,
+              ),
+              TextFieldWidget(
+                textEditingController: emailController,
+                labelText: 'Email',
+                iconData: FontAwesomeIcons.envelope,
+                type: TextInputType.emailAddress,
+                errorText: 'Email',
+                focusNode: _emailFocus,
+              ),
+              TextFieldWidget(
+                textEditingController: telephoneController,
+                labelText: 'Mobile Number',
+                iconData: FontAwesomeIcons.phone,
+                type: TextInputType.phone,
+                errorText: 'Mobile Number',
+                focusNode: _telephoneFocus,
+              ),
+              TextFieldWidget(
+                textEditingController: passwordController,
+                labelText: 'Password',
+                iconData: FontAwesomeIcons.lock,
+                obscureText: true,
+                errorText: 'Password',
+                focusNode: _passwordFocus,
+              ),
+              TextFieldWidget(
+                textEditingController: confirmPasswordController,
+                labelText: 'Confirm Password',
+                iconData: FontAwesomeIcons.lock,
+                obscureText: true,
+                errorText: 'Confirm Password',
+                focusNode: _confirmPasswordFocus,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ButtonWidget(
+                      text: 'Register',
+                      onPressed: () => _register(context),
                     ),
-                    Expanded(
-                        child: ButtonWidget(
-                            text: 'Login',
-                            color: LightColor.lightGrey,
-                            onPressed: () => Navigator.pop(context)))
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: ButtonWidget(
+                      text: 'Login',
+                      color: LightColor.lightGrey,
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   void _register(BuildContext context) {
     if (_signUpKey.currentState!.validate()) {
       // If the form is valid, navigate to the HomeScreen.
-      Provider.of<AppNotifier>(context,listen: false).setUserLogin(emailController.text,true);
+      Provider.of<AppNotifier>(context, listen: false)
+          .setUserLogin(emailController.text, true);
       Navigator.pushReplacementNamed(context, Constants.dashboard);
     } else {
-      scaffoldMessage(context,"Something went wrong");
+      scaffoldMessage(context, "Something went wrong");
     }
   }
-
 }

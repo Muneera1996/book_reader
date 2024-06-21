@@ -25,6 +25,15 @@ class _ShippingAddressState extends State<ShippingAddress> {
   String? country;
   AppSharedPreferences? sharedPreferences;
 
+  // Focus Nodes
+  final FocusNode firstnameFocusNode = FocusNode();
+  final FocusNode lastnameFocusNode = FocusNode();
+  final FocusNode addressFocusNode = FocusNode();
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode cityFocusNode = FocusNode();
+  final FocusNode countryFocusNode = FocusNode();
+  final FocusNode codeFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -33,10 +42,50 @@ class _ShippingAddressState extends State<ShippingAddress> {
       sharedPreferences = value;
       loadSavedData();
     });
+
+    // Add focus listeners to clear errors
+    addFocusListeners();
+  }
+
+  void addFocusListeners() {
+    firstnameFocusNode.addListener(() {
+      if (firstnameFocusNode.hasFocus) {
+        _shippingKey.currentState?.validate();
+      }
+    });
+    lastnameFocusNode.addListener(() {
+      if (lastnameFocusNode.hasFocus) {
+        _shippingKey.currentState?.validate();
+      }
+    });
+    addressFocusNode.addListener(() {
+      if (addressFocusNode.hasFocus) {
+        _shippingKey.currentState?.validate();
+      }
+    });
+    emailFocusNode.addListener(() {
+      if (emailFocusNode.hasFocus) {
+        _shippingKey.currentState?.validate();
+      }
+    });
+    cityFocusNode.addListener(() {
+      if (cityFocusNode.hasFocus) {
+        _shippingKey.currentState?.validate();
+      }
+    });
+    countryFocusNode.addListener(() {
+      if (countryFocusNode.hasFocus) {
+        _shippingKey.currentState?.validate();
+      }
+    });
+    codeFocusNode.addListener(() {
+      if (codeFocusNode.hasFocus) {
+        _shippingKey.currentState?.validate();
+      }
+    });
   }
 
   void loadSavedData() async {
-    // Example of loading saved data from SharedPreferences
     print("user2 ${sharedPreferences?.getFirstName()}");
 
     firstnameController.text = sharedPreferences?.getFirstName() ?? '';
@@ -61,6 +110,19 @@ class _ShippingAddressState extends State<ShippingAddress> {
   }
 
   @override
+  void dispose() {
+    // Dispose FocusNodes
+    firstnameFocusNode.dispose();
+    lastnameFocusNode.dispose();
+    addressFocusNode.dispose();
+    emailFocusNode.dispose();
+    cityFocusNode.dispose();
+    countryFocusNode.dispose();
+    codeFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -70,9 +132,8 @@ class _ShippingAddressState extends State<ShippingAddress> {
         builder: (context) => Form(
           key: _shippingKey,
           child: Center(
-            // color: LightColor.background,
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: ListView(
                 children: <Widget>[
                   const SizedBox(height: 10),
@@ -85,34 +146,33 @@ class _ShippingAddressState extends State<ShippingAddress> {
                     textEditingController: firstnameController,
                     labelText: 'First Name',
                     iconData: FontAwesomeIcons.userCircle,
+                    focusNode: firstnameFocusNode,
                   ),
                   const SizedBox(height: 4),
                   TextFieldWidget(
                     textEditingController: lastnameController,
                     labelText: 'Last Name',
                     iconData: FontAwesomeIcons.users,
+                    focusNode: lastnameFocusNode,
                   ),
                   const SizedBox(height: 4),
                   TextFieldWidget(
                     textEditingController: addressController1,
                     labelText: 'Address',
                     iconData: FontAwesomeIcons.addressCard,
+                    focusNode: addressFocusNode,
                   ),
                   const SizedBox(height: 4),
                   TextFieldWidget(
                     textEditingController: countryController,
                     labelText: 'Country',
                     iconData: FontAwesomeIcons.city,
-                    readOnly: true,
+                    readOnly: false,
+                    focusNode: countryFocusNode,
                     function: () async {
-                      // country = await Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => CountryScreen()),
-                      // );
                       if (country != null) {
                         countryController.text = country!;
                       }
-                      //countryController.text = country.countryName;
                     },
                   ),
                   const SizedBox(height: 4),
@@ -121,31 +181,35 @@ class _ShippingAddressState extends State<ShippingAddress> {
                     textEditingController: cityController,
                     labelText: 'City',
                     iconData: FontAwesomeIcons.city,
+                    focusNode: cityFocusNode,
                   ),
                   const SizedBox(height: 4),
                   TextFieldWidget(
                     textEditingController: codeController,
                     labelText: 'Postal Code',
                     iconData: FontAwesomeIcons.code,
+                    focusNode: codeFocusNode,
                   ),
                   const SizedBox(height: 20),
                   ButtonWidget(
                     text: 'Continue',
                     onPressed: () async {
-                      await saveData(); // Save data before navigating
-                      Navigator.pushReplacementNamed(
-                        context,
-                        Constants.checkout,
-                        arguments: {
-                          'firstName': firstnameController.text,
-                          'lastName': lastnameController.text,
-                          'address': addressController1.text,
-                          'city': cityController.text,
-                          'country': countryController.text,
-                          'postalCode': codeController.text,
-                        },
-                      );
-                      },
+                      if (_shippingKey.currentState?.validate() ?? false) {
+                        await saveData(); // Save data before navigating
+                        Navigator.pushReplacementNamed(
+                          context,
+                          Constants.checkout,
+                          arguments: {
+                            'firstName': firstnameController.text,
+                            'lastName': lastnameController.text,
+                            'address': addressController1.text,
+                            'city': cityController.text,
+                            'country': countryController.text,
+                            'postalCode': codeController.text,
+                          },
+                        );
+                      }
+                    },
                   ),
                 ],
               ),

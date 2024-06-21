@@ -48,6 +48,8 @@ dependencies:
   badges: ^3.1.2
   firebase_auth: ^5.1.0
   firebase_core: ^3.1.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
 
 
 dev_dependencies:
@@ -72,12 +74,18 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/navbar_icons/
     - assets/status_image/
     - assets/other_images/
     - assets/icons/
+
+#  flutter_icons:
+#    android: true
+#    ios: true
+#    image_path: "assets/other_images/logo.png"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -104,3 +112,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "#42a5f5"
+  image: "assets/other_images/logo.png"
+  android: true
+  ios: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/other_images/logo.png"

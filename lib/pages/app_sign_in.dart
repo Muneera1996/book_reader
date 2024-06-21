@@ -34,6 +34,10 @@ class _AppSignInState extends State<AppSignIn> {
   final _signInKey = GlobalKey<FormState>();
   AppSharedPreferences? sharedPreferences;
 
+  // Focus Nodes
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+
 
   @override
   void initState() {
@@ -44,6 +48,29 @@ class _AppSignInState extends State<AppSignIn> {
         emailController.text = sharedPreferences?.getEmail()??"";
       });
     });
+    // Add focus listeners to clear errors
+    addFocusListeners();
+  }
+
+  void addFocusListeners() {
+    emailFocusNode.addListener(() {
+      if (emailFocusNode.hasFocus) {
+        _signInKey.currentState?.validate();
+      }
+    });
+    passwordFocusNode.addListener(() {
+      if (passwordFocusNode.hasFocus) {
+        _signInKey.currentState?.validate();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Dispose FocusNodes
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -77,13 +104,18 @@ class _AppSignInState extends State<AppSignIn> {
                       textEditingController: emailController,
                       labelText: 'Email',
                       iconData: FontAwesomeIcons.envelope,
-                      errorText: 'Email'),
+                      errorText: 'Email',
+                    focusNode: emailFocusNode,
+                  ),
                   TextFieldWidget(
                       type: TextInputType.visiblePassword,
                       textEditingController: passwordController,
                       labelText: 'Password',
                       iconData: FontAwesomeIcons.userLock,
-                      errorText: 'Password'),
+                      errorText: 'Password',
+                    focusNode: passwordFocusNode,
+
+                  ),
                   const SizedBox(
                     height: 20,
                   ),

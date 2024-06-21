@@ -39,10 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
         color: LightColor.background,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Image.asset(kAppLogo,
-            height: 200,
-            width: 200,
-          ),
+          child: Image.asset(kAppLogo),
         ),
       ) )
         );
@@ -50,9 +47,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void checkFirstTime() async {
     bool userLogin = sharedPreferences?.getLogin() ?? false;
-
-    sharedPreferences?.setCurrency("Euro");
-    sharedPreferences?.setCurrencySymbol("\€");
 
     if(userLogin){
       Navigator.pushReplacementNamed(context, Constants.dashboard);

@@ -1,10 +1,12 @@
+import 'package:book_reader/utils/Constants.dart';
 import 'package:flutter/material.dart';
 
 class OrderConfirmationScreen extends StatefulWidget {
   const OrderConfirmationScreen({super.key});
 
   @override
-  State<OrderConfirmationScreen> createState() => _OrderConfirmationScreenState();
+  State<OrderConfirmationScreen> createState() =>
+      _OrderConfirmationScreenState();
 }
 
 class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
@@ -18,7 +20,8 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final Map<String, dynamic> args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     firstName = args['firstName'];
     lastName = args['lastName'];
     address = args['address'];
@@ -41,7 +44,8 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
             children: <Widget>[
               Text(
                 'Thank you for your order, $firstName $lastName!',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               const Text(
@@ -57,7 +61,18 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context); // Navigate back to previous screen
+                  Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      Constants.dashboard,
+                      arguments: {
+                        'firstName': firstName,
+                        'lastName': lastName,
+                        'address': address,
+                        'city': city,
+                        'country': country,
+                        'postalCode': postalCode,
+                      },
+                      (route) => false);
                 },
                 child: const Text('Back to Home'),
               ),

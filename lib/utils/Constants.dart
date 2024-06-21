@@ -10,4 +10,9 @@ class Constants{
   static const String shippingAddress = '/shipping_address';
   static const String checkout = '/checkout';
   static const String orderConfirmation = '/order_confirmation';
+
+
+  static const String noDescription = "No Description";
+
+
 }

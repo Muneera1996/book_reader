@@ -148,4 +148,9 @@ class DatabaseHelper {
     var result = await db.query(_tableName, where: 'id = ?', whereArgs: [id]);
     return result.isNotEmpty;
   }
+
+  Future<void> clearDatabase() async {
+    Database db = await instance.database;
+    await db.delete(_tableName);
+  }
 }

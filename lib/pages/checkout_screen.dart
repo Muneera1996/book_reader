@@ -25,11 +25,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   late String country;
   late String postalCode;
 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final Map<String, dynamic> args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     firstName = args['firstName'];
     lastName = args['lastName'];
     address = args['address'];
@@ -38,10 +38,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     postalCode = args['postalCode'];
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: LightColor.background,
       appBar: AppBar(
@@ -166,12 +164,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               fontSize: 20,
             ),
             const SizedBox(height: 10),
-            _addressDetail('First Name', firstName??""),
-            _addressDetail('Last Name', lastName??""),
-            _addressDetail('Address', address??""),
-            _addressDetail('City', city??""),
-            _addressDetail('Country', country??""),
-            _addressDetail('Postal Code', postalCode??""),
+            _addressDetail('First Name', firstName ?? ""),
+            _addressDetail('Last Name', lastName ?? ""),
+            _addressDetail('Address', address ?? ""),
+            _addressDetail('City', city ?? ""),
+            _addressDetail('Country', country ?? ""),
+            _addressDetail('Postal Code', postalCode ?? ""),
           ],
         ),
       ),
@@ -215,7 +213,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ),
             TitleText(
               text:
-              '${AppSharedPreferences().getCurrencySymbol()}${_calculateTotal()}',
+                  '${AppSharedPreferences().getCurrencySymbol()}${_calculateTotal()}',
               color: LightColor.secondaryDarkColor,
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -243,18 +241,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         fontSize: 20,
         onPressed: () {
           // Navigate to OrderConfirmationScreen and pass data as arguments
-          Navigator.pushReplacementNamed(
-            context,
-            Constants.orderConfirmation,
-            arguments: {
-              'firstName': firstName,
-              'lastName': lastName,
-              'address': address,
-              'city': city,
-              'country': country,
-              'postalCode': postalCode,
-            },
-          );
+          Navigator.pushNamedAndRemoveUntil(
+              context,
+              Constants.orderConfirmation,
+              arguments: {
+                'firstName': firstName,
+                'lastName': lastName,
+                'address': address,
+                'city': city,
+                'country': country,
+                'postalCode': postalCode,
+              },
+              (route) => route.settings.name == Constants.dashboard);
         },
       ),
     );

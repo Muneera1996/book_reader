@@ -107,17 +107,29 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
+              const SizedBox(
+                height: 4,
+              ),
+              TitleText(
+                text: descriptionText,
+                overflow: TextOverflow.ellipsis,
+                fontSize: 12,
+                maxLines: 2,
+                color: LightColor.darkgrey,
+                textAlign: TextAlign.start,
+              ),
               Row(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(right: 4,top: 8),
+                    padding: const EdgeInsets.only(right: 4, top: 20),
                     child: Container(
                       width: 100,
                       height: 100,
                       decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
                           color: LightColor.lightGrey,
-                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
                       child: Image.network(model.imageLinks['thumbnail'] ?? ''),
                     ),
                   ),
@@ -126,16 +138,24 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                   ),
                   Expanded(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         _getDivider(),
-                        TitleText(
-                          text: descriptionText,
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 12,
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
+                        SizedBox(
+                          height: 2,
                         ),
-                        SizedBox(height: 8,),
+                        TitleText(
+                          text: model.authors.last,
+                          color: LightColor.black,
+                          fontWeight: FontWeight.w400,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          fontSize: 12,
+                          textAlign: TextAlign.justify,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         Row(
                           children: <Widget>[
                             RichText(
@@ -152,21 +172,11 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                     color: LightColor.secondaryDarkColor,
                                     fontSize: 12),
                               ),
-                              const TextSpan(
-                                text: 'Author: ',
-                                style: TextStyle(
-                                    color: LightColor.black, fontSize: 12),
-                              ),
-                              TextSpan(
-                                text: '${model.authors}',
-                                style: const TextStyle(
-                                    color: LightColor.black, fontSize: 12),
-                              )
                             ]))
                           ],
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 8,
                         ),
                         quantitySection(context, model),
                       ],
@@ -187,7 +197,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.fromLTRB(0, 16, 10, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -211,10 +221,9 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                         text:
                             '${AppSharedPreferences().getCurrencySymbol()} ${int.parse(model.pageCount.toString()) * model.quantity}',
                         style: const TextStyle(
-                            color: LightColor.black, fontSize: 14,
-                          fontWeight: FontWeight.w600
-
-                        ),
+                            color: LightColor.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
                       )
                     ]))
                   ],

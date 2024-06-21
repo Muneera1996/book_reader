@@ -28,6 +28,8 @@ class AppNotifier extends ChangeNotifier {
   void setUserLogin(String email,bool login) {
     appSharedPreferences.setLogin(login);
     appSharedPreferences.setEmail(email);
+    appSharedPreferences.setCurrency("Euro");
+    appSharedPreferences.setCurrencySymbol("\€");
     notifyListeners();
   }
 
@@ -69,6 +71,10 @@ class AppNotifier extends ChangeNotifier {
 
   Future<void> loadCartFromDatabase() async {
     await CartList.getInstance().loadCartFromDatabase();
+    notifyListeners();
+  }
+  Future<void> clearDatabase() async {
+    await DatabaseHelper.instance.clearDatabase();
     notifyListeners();
   }
 }
