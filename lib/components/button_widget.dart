@@ -11,7 +11,7 @@ class ButtonWidget extends StatelessWidget {
   const ButtonWidget({super.key,
     required this.text,
     required this.onPressed,
-    this.color = LightColor.secondaryColor,
+    this.color = LightColor.primaryColor,
     this.fontSize = 17,
   });
 

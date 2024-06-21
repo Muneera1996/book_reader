@@ -1,124 +1,167 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class AppSharedPreferences {
-  static SharedPreferences? sharedPreferences;
+   static SharedPreferences? _sharedPreferences;
   static AppSharedPreferences? _appSharedPreferences;
 
   AppSharedPreferences();
 
   static Future<AppSharedPreferences> getPreferencesInstance() async {
-    if (sharedPreferences == null) {
+    if (_sharedPreferences == null) {
       _appSharedPreferences = AppSharedPreferences();
-      sharedPreferences = await SharedPreferences.getInstance();
+      _sharedPreferences = await SharedPreferences.getInstance();
       return _appSharedPreferences!;
     }
     return _appSharedPreferences!;
   }
 
   String? getLanguageCode() {
-    return sharedPreferences?.getString("languageCode");
+    return _sharedPreferences?.getString("languageCode");
   }
 
   bool setLanguageCode(String languageCode) {
-    sharedPreferences?.setString("languageCode", languageCode);
+    _sharedPreferences?.setString("languageCode", languageCode);
     return true;
   }
 
   String? getDecimalPlace() {
-    return sharedPreferences?.getString("decimalPlace");
+    return _sharedPreferences?.getString("decimalPlace");
   }
 
   void setDecimalPlace(String decimalPlace) {
-    sharedPreferences?.setString("decimalPlace", decimalPlace);
+    _sharedPreferences?.setString("decimalPlace", decimalPlace);
   }
 
   String? getAddress() {
-    return sharedPreferences?.getString("address");
+    return _sharedPreferences?.getString("address");
   }
 
   void setAddress(String address) {
-    sharedPreferences?.setString("address", address);
+    _sharedPreferences?.setString("address", address);
   }
 
   String? getPhoneNo() {
-    return sharedPreferences?.getString("phoneNo");
+    return _sharedPreferences?.getString("phoneNo");
   }
 
   void setPhoneNo(String phoneNo) {
-    sharedPreferences?.setString("phoneNo", phoneNo);
-  }
-
-  String? getContactUsEmail() {
-    return sharedPreferences?.getString("contactUsEmail");
-  }
-
-  void setContactUsEmail(String contactUsEmail) {
-    sharedPreferences?.setString("contactUsEmail", contactUsEmail);
-  }
-
-  String? getFcmAndroidSenderId() {
-    return sharedPreferences?.getString("fcmAndroidSenderId");
-  }
-
-  void setFcmAndroidSenderId(String fcmAndroidSenderId) {
-    sharedPreferences?.setString("fcmAndroidSenderId", fcmAndroidSenderId);
+    _sharedPreferences?.setString("phoneNo", phoneNo);
   }
 
   String? getAppName() {
-    return sharedPreferences?.getString("appName");
+    return _sharedPreferences?.getString("appName");
   }
 
   void setAppName(String appName) {
-    sharedPreferences?.setString("appName", appName);
+    _sharedPreferences?.setString("appName", appName);
   }
 
   String? getNewProductDuration() {
-    return sharedPreferences?.getString("newProductDuration");
+    return _sharedPreferences?.getString("newProductDuration");
   }
 
   void setNewProductDuration(String newProductDuration) {
-    sharedPreferences?.setString("newProductDuration", newProductDuration);
+    _sharedPreferences?.setString("newProductDuration", newProductDuration);
   }
 
   String? getCurrencySymbol() {
-    return sharedPreferences?.getString("currencySymbol");
+    return _sharedPreferences?.getString("currencySymbol");
   }
 
   Future<bool> setCurrencySymbol(String currencySymbol) async {
-    return await sharedPreferences?.setString("currencySymbol", currencySymbol) ?? false;
+    return await _sharedPreferences?.setString(
+            "currencySymbol", currencySymbol) ??
+        false;
   }
 
   String? getCurrencyCode() {
-    return sharedPreferences?.getString("currencyCode");
+    return _sharedPreferences?.getString("currencyCode");
   }
 
   Future<bool> setCurrency(String currencyCode) async {
-    return await sharedPreferences?.setString("currencyCode", currencyCode) ?? false;
+    return await _sharedPreferences?.setString("currencyCode", currencyCode) ??
+        false;
   }
 
   String? getLanguage() {
-    return sharedPreferences?.getString("languageId");
+    return _sharedPreferences?.getString("languageId");
   }
 
   Future<bool> setLanguage(String languageId) async {
-    return await sharedPreferences?.setString("languageId", languageId) ?? false;
+    return await _sharedPreferences?.setString("languageId", languageId) ??
+        false;
   }
 
   bool getLogin() {
-    return sharedPreferences?.getBool("isLogin") ?? false;
+    return _sharedPreferences?.getBool("isLogin") ?? false;
   }
 
   void setLogin(bool isLogin) {
-    sharedPreferences?.setBool("isLogin", isLogin);
+    _sharedPreferences?.setBool("isLogin", isLogin);
   }
 
   bool getFirstTime() {
-    return sharedPreferences?.getBool("firstTime") ?? false;
+    return _sharedPreferences?.getBool("firstTime") ?? false;
   }
 
   void setFirstTime(bool isFirstTime) {
-    sharedPreferences?.setBool("firstTime", isFirstTime);
+    _sharedPreferences?.setBool("firstTime", isFirstTime);
+  }
+
+  // Add methods for shipping address data
+  String? getFirstName() {
+    return _sharedPreferences?.getString("firstName");
+  }
+
+  void setFirstName(String firstName) {
+    _sharedPreferences?.setString("firstName", firstName);
+  }
+
+  String? getLastName() {
+    return _sharedPreferences?.getString("lastName");
+  }
+
+  void setLastName(String lastName) {
+    _sharedPreferences?.setString("lastName", lastName);
+  }
+
+  String? getAddress1() {
+    return _sharedPreferences?.getString("address1");
+  }
+
+  void setAddress1(String address1) {
+    _sharedPreferences?.setString("address1", address1);
+  }
+
+  String? getEmail() {
+    return _sharedPreferences?.getString("email");
+  }
+
+  void setEmail(String email) {
+    _sharedPreferences?.setString("email", email);
+  }
+
+  String? getCity() {
+    return _sharedPreferences?.getString("city");
+  }
+
+  void setCity(String city) {
+    _sharedPreferences?.setString("city", city);
+  }
+
+  String? getCountry() {
+    return _sharedPreferences?.getString("country");
+  }
+
+  void setCountry(String country) {
+    _sharedPreferences?.setString("country", country);
+  }
+
+  String? getPostalCode() {
+    return _sharedPreferences?.getString("postalCode");
+  }
+
+  void setPostalCode(String postalCode) {
+    _sharedPreferences?.setString("postalCode", postalCode);
   }
 }
-

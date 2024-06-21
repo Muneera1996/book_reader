@@ -1,10 +1,12 @@
 import 'package:book_reader/components/button_widget.dart';
+import 'package:book_reader/notifiers/AppNotifier.dart';
 import 'package:book_reader/pages/home_screen.dart';
 import 'package:book_reader/themes/light_color.dart';
 import 'package:book_reader/utils/Constants.dart';
 import 'package:book_reader/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class AppSignUp extends StatefulWidget {
   const AppSignUp({super.key});
@@ -141,7 +143,8 @@ class _AppSignUpState extends State<AppSignUp> {
                 Row(
                   children: <Widget>[
                     Expanded(
-                        child: ButtonWidget(
+                        child:
+                        ButtonWidget(
                             text: 'Register',
                             onPressed: () => _register(context))),
                     const SizedBox(
@@ -163,7 +166,8 @@ class _AppSignUpState extends State<AppSignUp> {
   void _register(BuildContext context) {
     if (_signUpKey.currentState!.validate()) {
       // If the form is valid, navigate to the HomeScreen.
-      Navigator.pushNamed(context, Constants.dashboard);
+      Provider.of<AppNotifier>(context,listen: false).setUserLogin(emailController.text,true);
+      Navigator.pushReplacementNamed(context, Constants.dashboard);
     } else {
       scaffoldMessage(context,"Something went wrong");
     }

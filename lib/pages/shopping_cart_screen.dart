@@ -5,6 +5,7 @@ import 'package:book_reader/notifiers/AppNotifier.dart';
 import 'package:book_reader/pages/empty_screen.dart';
 import 'package:book_reader/themes/light_color.dart';
 import 'package:book_reader/themes/theme.dart';
+import 'package:book_reader/utils/Constants.dart';
 import 'package:book_reader/utils/SharedPreferences.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                   height: AppTheme.fullHeight(context) * 0.75,
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: <Widget>[
                           _Books(context),
@@ -86,12 +87,14 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   }
 
   Widget _item(BuildContext context, Book model) {
-    return SizedBox(
-      height: 270,
+    String descriptionText =
+        model.description.isNotEmpty ? model.description : "No Description";
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Card(
         elevation: 8,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
               const SizedBox(
@@ -101,17 +104,22 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                 text: model.title,
                 color: LightColor.black,
                 fontWeight: FontWeight.w700,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
               Row(
                 children: <Widget>[
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: LightColor.lightGrey,
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    child: Image.network(model.imageLinks['thumbnail'] ?? ''),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 4,top: 8),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          color: LightColor.lightGrey,
+                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                      child: Image.network(model.imageLinks['thumbnail'] ?? ''),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
@@ -120,17 +128,18 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                     child: Column(
                       children: <Widget>[
                         _getDivider(),
+                        TitleText(
+                          text: descriptionText,
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 12,
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                        ),
+                        SizedBox(height: 8,),
                         Row(
                           children: <Widget>[
                             RichText(
                                 text: TextSpan(children: [
-                              TextSpan(
-                                text:
-                                    '${model.description} \n',
-                                style: const TextStyle(
-                                    color: LightColor.darkgrey,
-                                    fontSize: 12),
-                              ),
                               const TextSpan(
                                 text: 'Price:   ',
                                 style: TextStyle(
@@ -144,7 +153,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                     fontSize: 12),
                               ),
                               const TextSpan(
-                                text: 'Author \n',
+                                text: 'Author: ',
                                 style: TextStyle(
                                     color: LightColor.black, fontSize: 12),
                               ),
@@ -157,29 +166,24 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                           ],
                         ),
                         const SizedBox(
-                          height: 8,
+                          height: 10,
                         ),
                         quantitySection(context, model),
                       ],
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: 35,
-                        height: 35,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: LightColor.lightGrey.withAlpha(150),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: TitleText(
-                          text: 'x${model.quantity}',
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  )
+                  Container(
+                    width: 35,
+                    height: 35,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: LightColor.lightGrey.withAlpha(150),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: TitleText(
+                      text: 'x${model.quantity}',
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
               Padding(
@@ -201,12 +205,16 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                         text: TextSpan(children: [
                       const TextSpan(
                         text: 'Total:   ',
-                        style: TextStyle(color: LightColor.black, fontSize: 18),
+                        style: TextStyle(color: LightColor.black, fontSize: 12),
                       ),
                       TextSpan(
                         text:
                             '${AppSharedPreferences().getCurrencySymbol()} ${int.parse(model.pageCount.toString()) * model.quantity}',
-                        style: TextStyle(color: LightColor.black, fontSize: 20),
+                        style: const TextStyle(
+                            color: LightColor.black, fontSize: 14,
+                          fontWeight: FontWeight.w600
+
+                        ),
                       )
                     ]))
                   ],
@@ -325,14 +333,14 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   }
 
   Widget _submitButton(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: AppTheme.fullWidth(context) * 0.8,
       height: 40.0,
       child: ButtonWidget(
         text: 'Next',
         fontSize: 20,
         onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => ShippingAddress()));
+          Navigator.pushNamed(context, Constants.shippingAddress);
         },
       ),
     );

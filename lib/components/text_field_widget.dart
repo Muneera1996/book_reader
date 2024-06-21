@@ -9,6 +9,7 @@ class TextFieldWidget extends StatelessWidget {
   final IconData iconData;
   final TextInputType type;
   final bool readOnly;
+  final VoidCallback? function;
 
   const TextFieldWidget({super.key,
     required this.textEditingController,
@@ -17,11 +18,13 @@ class TextFieldWidget extends StatelessWidget {
     this.type = TextInputType.text,
     this.errorText = 'Text',
     this.readOnly = false,
+    this.function,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: function,
         readOnly: readOnly,
         validator: (value) {
           if (value!.isEmpty) {
@@ -34,10 +37,10 @@ class TextFieldWidget extends StatelessWidget {
         controller: textEditingController,
         decoration: InputDecoration(
           labelText: labelText,
-          labelStyle: const TextStyle(color: LightColor.secondaryDarkColor),
+          labelStyle: const TextStyle(color: LightColor.black),
           prefixIcon: Icon(
             iconData,
-            color: LightColor.secondaryDarkColor,
+            color: LightColor.black,
           ),
           border: getUnderLine(),
           enabledBorder: getUnderLine(),

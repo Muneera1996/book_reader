@@ -1,9 +1,12 @@
+import 'package:book_reader/notifiers/AppNotifier.dart';
 import 'package:book_reader/pages/app_sign_in.dart';
 import 'package:book_reader/pages/dashboard.dart';
+import 'package:book_reader/themes/light_color.dart';
 import 'package:book_reader/utils/Constants.dart';
 import 'package:book_reader/utils/SharedPreferences.dart';
 import 'package:book_reader/utils/images.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -16,40 +19,46 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  // SharedPreferences? sharedPreferences;
+  AppSharedPreferences? sharedPreferences;
 
   @override
   void initState() {
     super.initState();
+    AppSharedPreferences.getPreferencesInstance().then((value) {
+      setState(() {
+        sharedPreferences = value;
+      });
+    });
     performDelayedAction();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Image.asset(kAppLogo,
-        height: double.infinity,
-        width: double.infinity,
-      )
-    );
+    child:  Consumer<AppNotifier>(builder: (context, value, child) => Container(
+        color: LightColor.background,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Image.asset(kAppLogo,
+            height: 200,
+            width: 200,
+          ),
+        ),
+      ) )
+        );
   }
 
   void checkFirstTime() async {
-    AppSharedPreferences sharedPreferences = await AppSharedPreferences.getPreferencesInstance();
-    bool firstTime = sharedPreferences.getFirstTime() ?? true;
+    bool userLogin = sharedPreferences?.getLogin() ?? false;
 
-    sharedPreferences.setCurrency("Euro");
-    sharedPreferences.setCurrencySymbol("\€");
+    sharedPreferences?.setCurrency("Euro");
+    sharedPreferences?.setCurrencySymbol("\€");
 
-    if(firstTime){
-      Navigator.pushReplacementNamed(context, Constants.signIn);
-
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AppSignIn()));
+    if(userLogin){
+      Navigator.pushReplacementNamed(context, Constants.dashboard);
     }
     else{
-      Navigator.pushReplacementNamed(context, Constants.dashboard);
-
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
+      Navigator.pushReplacementNamed(context, Constants.signIn);
     }
 
   }

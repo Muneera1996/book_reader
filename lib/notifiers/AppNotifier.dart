@@ -25,8 +25,9 @@ class AppNotifier extends ChangeNotifier {
     return result;
   }
 
-  void setUserLogin(bool login) {
+  void setUserLogin(String email,bool login) {
     appSharedPreferences.setLogin(login);
+    appSharedPreferences.setEmail(email);
     notifyListeners();
   }
 
