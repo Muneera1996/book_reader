@@ -1,4 +1,5 @@
 import 'package:book_reader/components/custom_app_bar.dart';
+import 'package:book_reader/network/Network.dart';
 import 'package:book_reader/pages/fav_screen.dart';
 import 'package:book_reader/pages/home_screen.dart';
 import 'package:book_reader/pages/saved_screen.dart';
@@ -13,11 +14,15 @@ import '../notifiers/AppNotifier.dart';
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
+
   @override
   State<Dashboard> createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
+  Network network = Network();
+  AppSharedPreferences? sharedPreferences;
+
   int _currentIndex  = 0;
   final List<Widget> screens = [
     const HomeScreen(),
@@ -52,18 +57,27 @@ class _DashboardState extends State<Dashboard> {
             ),
             TextButton(
               onPressed: () async {
-                // Clear the database
-                await Provider.of<AppNotifier>(context, listen: false).clearDatabase();
+                // Perform logout API call
+                final token = Provider.of<AppNotifier>(context, listen: false).getUserToken();
 
-                // Clear shared preferences
-                var prefs = await AppSharedPreferences.getPreferencesInstance();
-                await prefs.clearSharedPreferences();
+                bool success = await Network().logout(token);
 
-                // Close the dialog
-                Navigator.of(context).pop();
+                if (success) {
+                  // Clear the database
+                  await Provider.of<AppNotifier>(context, listen: false).clearDatabase();
 
-                // Navigate to the sign-in screen and remove all previous routes
-                Navigator.pushNamedAndRemoveUntil(context, Constants.signIn, (route) => false);
+                  // Clear shared preferences
+                  var prefs = await AppSharedPreferences.getPreferencesInstance();
+                  await prefs.clearSharedPreferences();
+
+                  // Navigate to the sign-in screen and remove all previous routes
+                  Navigator.pushNamedAndRemoveUntil(context, Constants.signIn, (route) => false);
+                } else {
+                  // Handle logout failure
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Logout failed. Please try again.'),
+                  ));
+                }
               },
               child: const Text("Logout"),
             ),

@@ -231,6 +231,8 @@ class _AppSignInState extends State<AppSignIn> {
         final password = passwordController.text;
 
         final response = await network.signIn(email, password);
+
+
         final token = response['data']['token'];
 
         // Save data and Navigate to the dashboard

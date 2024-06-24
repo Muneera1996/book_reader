@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:book_reader/utils/functions.dart';
 import 'package:http/http.dart' as http;
 import '../models/Country.dart';
 import '../models/book.dart';
@@ -42,7 +43,8 @@ class Network {
     }
   }
 
-  Future<Map<String, dynamic>?> signUp(String email, String password, String firstname, String lastname, String mobile) async {
+  Future<Map<String, dynamic>?> signUp(String email, String password,
+      String firstname, String lastname, String mobile) async {
     var url = Uri.parse('${_appUrl}users/signup');
     var response = await http.post(
       url,
@@ -81,21 +83,34 @@ class Network {
     }
   }
 
-  Future<void> logout() async {
-    var url = Uri.parse('${_appUrl}users/logout');
-    var response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-    );
+  Future<bool> logout(String? token) async {
+    try {
+      var url = Uri.parse('${_appUrl}users/logout');
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${token}',
+        },
+      );
 
-    if (response.statusCode != 200) {
-      throw Exception('Failed to log out');
+      if (response.statusCode == 200) {
+        return true; // Successful logout
+      } else {
+        showError(response);
+        return false; // Logout failed
+      }
+    } catch (e) {
+      print('Exception during logout: $e');
+      Exception(e);
+      return false;
     }
   }
 
   void showError(http.Response? response) {
     // Handle error response
-    var errorMessage = "Something went wrong. Status code: ${response?.statusCode}";
+    var errorMessage =
+        "Something went wrong. Status code: ${response?.statusCode}";
     if (response?.body != null && response!.body.isNotEmpty) {
       errorMessage = json.decode(response.body)['message'];
     }

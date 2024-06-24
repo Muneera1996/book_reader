@@ -20,6 +20,10 @@ class AppNotifier extends ChangeNotifier {
 
   factory AppNotifier() => appNotifier;
 
+  String? getUserToken() {
+    return appSharedPreferences.getToken();
+  }
+
   bool isUserLogin() {
     bool result = appSharedPreferences.getLogin();
     return result;
