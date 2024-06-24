@@ -149,6 +149,14 @@ class DatabaseHelper {
     return result.isNotEmpty;
   }
 
+  Future<void> checkout() async {
+    Database db = await instance.database;
+    await db.transaction((txn) async {
+      await txn.delete(_tableName, where: 'save = ?', whereArgs: [0]);
+      await txn.update(_tableName, {'quantity': 0}, where: 'save = ?', whereArgs: [1]);
+    });
+  }
+
   Future<void> clearDatabase() async {
     Database db = await instance.database;
     await db.delete(_tableName);

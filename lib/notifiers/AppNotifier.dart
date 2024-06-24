@@ -82,5 +82,9 @@ class AppNotifier extends ChangeNotifier {
     await DatabaseHelper.instance.clearDatabase();
     notifyListeners();
   }
+  Future<void> checkoutCart() async {
+    await CartList.getInstance().checkout();
+    notifyListeners();
+  }
 }
 

@@ -83,4 +83,9 @@ class CartList {
     _cartItems.clear();
     _cartItems.addAll(await dbHelper.readAllCartBooks());
   }
+  Future<void> checkout() async {
+    final dbHelper = DatabaseHelper.instance;
+    await dbHelper.checkout();
+    _cartItems.clear();
+  }
 }

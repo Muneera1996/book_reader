@@ -239,8 +239,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       child: ButtonWidget(
         text: 'Confirm Order',
         fontSize: 20,
-        onPressed: () {
-          // Navigate to OrderConfirmationScreen and pass data as arguments
+        onPressed: () async {
+          // clear cart, Navigate to OrderConfirmationScreen and pass data as arguments
+          await Provider.of<AppNotifier>(context, listen: false).checkoutCart();
           Navigator.pushNamedAndRemoveUntil(
               context,
               Constants.orderConfirmation,
