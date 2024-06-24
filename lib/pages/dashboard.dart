@@ -63,8 +63,6 @@ class _DashboardState extends State<Dashboard> {
                 Navigator.of(context).pop();
 
                 // Navigate to the sign-in screen and remove all previous routes
-
-                Navigator.of(context).pop(); // Close the dialog
                 Navigator.pushNamedAndRemoveUntil(context, Constants.signIn, (route) => false);
               },
               child: const Text("Logout"),

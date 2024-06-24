@@ -25,9 +25,10 @@ class AppNotifier extends ChangeNotifier {
     return result;
   }
 
-  void setUserLogin(String email,bool login) {
+  void setUserLogin(String token,String email,bool login) {
     appSharedPreferences.setLogin(login);
     appSharedPreferences.setEmail(email);
+    appSharedPreferences.setToken(token);
     appSharedPreferences.setCurrency("Euro");
     appSharedPreferences.setCurrencySymbol("\€");
     notifyListeners();

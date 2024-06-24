@@ -1,5 +1,6 @@
 import 'package:book_reader/components/button_widget.dart';
 import 'package:book_reader/components/text_field_widget.dart';
+import 'package:book_reader/network/Network.dart';
 import 'package:book_reader/notifiers/AppNotifier.dart';
 import 'package:book_reader/pages/home_screen.dart';
 import 'package:book_reader/themes/light_color.dart';
@@ -34,6 +35,7 @@ class _AppSignUpState extends State<AppSignUp> {
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _confirmPasswordFocus = FocusNode();
   final FocusNode _telephoneFocus = FocusNode();
+  Network network = Network();
 
   @override
   void dispose() {
@@ -143,12 +145,37 @@ class _AppSignUpState extends State<AppSignUp> {
 
   void _register(BuildContext context) {
     if (_signUpKey.currentState!.validate()) {
-      // If the form is valid, navigate to the HomeScreen.
-      Provider.of<AppNotifier>(context, listen: false)
-          .setUserLogin(emailController.text, true);
-      Navigator.pushReplacementNamed(context, Constants.dashboard);
+      // If the form is valid, api success, navigate to the HomeScreen.
+      signUpUser();
+
     } else {
-      scaffoldMessage(context, "Something went wrong");
+      scaffoldMessage(context, "Please fill in all fields..");
+
+    }
+  }
+
+  void signUpUser() async {
+   // showLoading();
+    try {
+      final email = emailController.text;
+      final password = passwordController.text;
+      final firstname = firstnameController.text;
+      final lastname = lastnameController.text;
+      final mobile = telephoneController.text;
+
+      final response = await network.signUp(email, password, firstname, lastname, mobile);
+
+      // Assuming the response contains user data and token
+      if(response!=null&&response.isNotEmpty) {
+        final token = response['data']['token'];
+        // Navigate to the dashboard
+        Provider.of<AppNotifier>(context, listen: false).setUserLogin(
+            token, email, true);
+        Navigator.pushReplacementNamed(context, Constants.dashboard);
+      }
+    } catch (error) {
+  //  dismissLoading();
+    scaffoldMessage(context, "Error $error");
     }
   }
 }

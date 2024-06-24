@@ -1,6 +1,8 @@
 import 'package:book_reader/components/button_widget.dart';
 import 'package:book_reader/components/text_field_widget.dart';
 import 'package:book_reader/components/title_text.dart';
+import 'package:book_reader/models/Country.dart';
+import 'package:book_reader/pages/choose_country.dart';
 import 'package:book_reader/utils/Constants.dart';
 import 'package:book_reader/utils/SharedPreferences.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class _ShippingAddressState extends State<ShippingAddress> {
   TextEditingController countryController = TextEditingController();
   TextEditingController codeController = TextEditingController();
   final _shippingKey = GlobalKey<FormState>();
-  String? country;
+  Data? country;
   AppSharedPreferences? sharedPreferences;
 
   // Focus Nodes
@@ -166,12 +168,17 @@ class _ShippingAddressState extends State<ShippingAddress> {
                   TextFieldWidget(
                     textEditingController: countryController,
                     labelText: 'Country',
+                    type: TextInputType.text,
                     iconData: FontAwesomeIcons.city,
-                    readOnly: false,
                     focusNode: countryFocusNode,
                     function: () async {
-                      if (country != null) {
-                        countryController.text = country!;
+                      country = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CountryScreen()),
+                      );
+                      if(country!=null) {
+                        countryController.text = country!.countryName!;
                       }
                     },
                   ),

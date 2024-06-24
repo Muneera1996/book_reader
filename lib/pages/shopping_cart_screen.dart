@@ -141,11 +141,11 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         _getDivider(),
-                        SizedBox(
+                        const SizedBox(
                           height: 2,
                         ),
                         TitleText(
-                          text: model.authors.last,
+                          text: model.authors.isNotEmpty ? model.authors.first : "",
                           color: LightColor.black,
                           fontWeight: FontWeight.w400,
                           overflow: TextOverflow.ellipsis,

@@ -1,69 +1,72 @@
-// class Country {
-//   String success;
-//   List<Data> data;
-//   String message;
-//
-//   Country({this.success, this.data, this.message});
-//
-//   Country.fromJson(Map<String, dynamic> json) {
-//     success = json['success'];
-//     if (json['data'] != null) {
-//       data = new List<Data>();
-//       json['data'].forEach((v) {
-//         data.add(new Data.fromJson(v));
-//       });
-//     }
-//     message = json['message'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['success'] = this.success;
-//     if (this.data != null) {
-//       data['data'] = this.data.map((v) => v.toJson()).toList();
-//     }
-//     data['message'] = this.message;
-//     return data;
-//   }
-// }
-//
-// class Data {
-//   String countryId;
-//   String countryName;
-//   String countryCode;
-//   String isoCode3;
-//   String addressFormat;
-//   String postcodeRequired;
-//   String status;
-//
-//   Data(
-//       {this.countryId,
-//         this.countryName,
-//         this.countryCode,
-//         this.isoCode3,
-//         this.addressFormat,
-//         this.postcodeRequired,
-//         this.status});
-//
-//   Data.fromJson(Map<String, dynamic> json) {
-//     countryId = json['country_id'];
-//     countryName = json['country_name'];
-//     countryCode = json['country_code'];
-//     isoCode3 = json['iso_code_3'];
-//     addressFormat = json['address_format'];
-//     postcodeRequired = json['postcode_required'];
-//     status = json['status'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['country_id'] = this.countryId;
-//     data['country_name'] = this.countryName;
-//     data['country_code'] = this.countryCode;
-//     data['iso_code_3'] = this.isoCode3;
-//     data['address_format'] = this.addressFormat;
-//     data['postcode_required'] = this.postcodeRequired;
-//     data['status'] = this.status;
-//     return data;
-//   }
-// }
+class Country {
+  String? status;
+  int? statusCode;
+  String? message;
+  List<Data>? data;
+
+  Country({this.status, this.statusCode, this.message, this.data});
+
+  Country.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    statusCode = json['statusCode'];
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(Data.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['status'] = status;
+    data['statusCode'] = statusCode;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Data {
+  String? sId;
+  String? countryName;
+  String? countryCode;
+  String? icon;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+
+  Data(
+      {this.sId,
+        this.countryName,
+        this.countryCode,
+        this.icon,
+        this.createdAt,
+        this.updatedAt,
+        this.iV});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    countryName = json['country_name'];
+    countryCode = json['country_code'];
+    icon = json['icon'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['_id'] = sId;
+    data['country_name'] = countryName;
+    data['country_code'] = countryCode;
+    data['icon'] = icon;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    return data;
+  }
+}

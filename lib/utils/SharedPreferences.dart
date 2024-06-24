@@ -133,6 +133,14 @@ class AppSharedPreferences {
     _sharedPreferences?.setString("address1", address1);
   }
 
+   String? getToken() {
+     return _sharedPreferences?.getString("token");
+   }
+
+   void setToken(String token) {
+     _sharedPreferences?.setString("token", token);
+   }
+
   String? getEmail() {
     return _sharedPreferences?.getString("email");
   }
