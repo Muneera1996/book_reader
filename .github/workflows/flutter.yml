@@ -2,9 +2,9 @@ name: Flutter
 
 on:  #events (push and pull_request)
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 
 jobs:   #here we specify the jobs - We could have multiple jobs
