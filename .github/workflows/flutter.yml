@@ -32,9 +32,6 @@ jobs:
         run: ./gradlew assembleDebug
         working-directory: book_reader
 
-      - name: List files for debugging
-        run: ls -R
-
       - name: Upload Artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
