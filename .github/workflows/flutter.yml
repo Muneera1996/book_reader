@@ -24,15 +24,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Debug - List directory structure
-        run: ls -R
-        continue-on-error: true
-
       - name: Make gradlew executable
-        run: chmod +x gradlew
+        run: chmod +x ./gradlew
 
       - name: Execute Gradle command - assembleDebug
-        run: ./book_reader/gradlew assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Upload Artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
