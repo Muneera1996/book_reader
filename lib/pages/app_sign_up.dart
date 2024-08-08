@@ -1,8 +1,7 @@
 import 'package:book_reader/components/button_widget.dart';
 import 'package:book_reader/components/text_field_widget.dart';
-import 'package:book_reader/network/Network.dart';
+import 'package:book_reader/network/network.dart';
 import 'package:book_reader/notifiers/AppNotifier.dart';
-import 'package:book_reader/pages/home_screen.dart';
 import 'package:book_reader/themes/light_color.dart';
 import 'package:book_reader/utils/Constants.dart';
 import 'package:book_reader/utils/functions.dart';

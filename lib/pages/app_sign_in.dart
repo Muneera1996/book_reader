@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:book_reader/components/button_widget.dart';
 import 'package:book_reader/components/title_text.dart';
-import 'package:book_reader/network/Network.dart';
+import 'package:book_reader/network/network.dart';
 import 'package:book_reader/notifiers/AppNotifier.dart';
 import 'package:book_reader/pages/app_sign_up.dart';
 import 'package:book_reader/themes/light_color.dart';

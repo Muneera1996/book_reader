@@ -1,5 +1,5 @@
 import 'package:book_reader/components/custom_app_bar.dart';
-import 'package:book_reader/network/Network.dart';
+import 'package:book_reader/network/network.dart';
 import 'package:book_reader/pages/fav_screen.dart';
 import 'package:book_reader/pages/home_screen.dart';
 import 'package:book_reader/pages/saved_screen.dart';
